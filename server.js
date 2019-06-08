@@ -1,9 +1,12 @@
-// Creating web server
-// First we need to load in Express
+// Creating web server using express framework
 const express = require('express'),
 	fs = require('fs'),
 	hbs = require('hbs');
-// To use express framework, we write following statement.
+
+
+// process.env is an object that stores key-value pairs.
+const port = process.env.PORT || 3000;
+
 var app = express();
 
 hbs.registerPartials(__dirname+'/views/partials');
@@ -30,30 +33,20 @@ app.use( (req, res, next)=>{
 		{
 			if(err)
 			{
-
+				console.log('Unable to append logs to file');
 			}
 		});
 	console.log(str);
 	next();
 });
-
 // rendering the maintenace file in new niddleware.
 // req and res in middleware and request handlers are same objects.
-app.use((req, res, next)=>{
-	res.render('maintenance.hbs');
-});
+// app.use((req, res, next)=>{
+// 	res.render('maintenance.hbs');
+// });
 app.use(express.static(__dirname+'/public'));
 // Setting up HTTP route handlers for handling various HTTP 
-// requests at different routes
-
-// Routes are endpoints or URI paths at which apllication serves
-// some purpose, based on the HTTP request or route.
-// We can send some data back,like HTML page or JSON data.
-// Handling get request at root route.
-// First argument is route and second argument is the fucntion
-// which tells what to send back to user.
-// Request object contains info about the request coming in.
-// Header, body, 
+// requests at different routes 
 app.get('/', (req, res)=>{
 	res.render('home.hbs',{
 		title: 'Home Page',
@@ -71,4 +64,6 @@ app.get('/error',(req, res)=>{
 	});
 });
 // To make app to listen, ie, to bind app to a port in our machine
-app.listen(3000);
+app.listen(port, ()=>{
+	console.log('Server running on port ',port);
+});
